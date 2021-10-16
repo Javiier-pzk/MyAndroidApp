@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class StartActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
@@ -47,7 +49,7 @@ public class StartActivity extends AppCompatActivity implements FirebaseAuth.Aut
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         if (firebaseAuth.getCurrentUser() != null && flag) {
-            c
+            //A temp solution to a firebase bug where the authStateListener is fired twice
             flag = false;
             startActivity(new Intent(this, MainActivity.class));
             finish();

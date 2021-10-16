@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +9,14 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.myapplication.util.Auth;
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
+import com.example.myapplication.util.Utils;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
@@ -60,17 +67,38 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseAuth.
         }
     }
 
-    private void validateAndRegister(String enteredEmail, String enteredPassword, String enteredReconfirmPassword) {
+    private void validateAndRegister(String enteredEmail, String enteredPassword,
+                                     String enteredReconfirmPassword) {
         if (TextUtils.isEmpty(enteredEmail) ||
             TextUtils.isEmpty(enteredPassword) ||
             TextUtils.isEmpty(enteredReconfirmPassword)) {
             Utils.showShortToast(this, "Email or password is empty!");
-        } else if (enteredPassword.length() < 6) {
-            Utils.showShortToast(this, "Password must be more than 6 characters long");
-        } else if (!enteredReconfirmPassword.equals(enteredPassword)) {
-            Utils.showShortToast(this, "Your passwords do not match");
-        } else {
-            Auth.createNewUser(enteredEmail, enteredPassword, this);
+            return;
         }
+
+        if (!isValidPassword(enteredPassword)) {
+            Utils.showLongToast(this,
+                    "Password must contain 8 - 20 characters and have at least "
+                            + "1 upper case letter, 1 digit and 1 special character");
+            return;
+        }
+
+        if (!enteredReconfirmPassword.equals(enteredPassword)) {
+            Utils.showShortToast(this, "Your passwords do not match");
+            return;
+        }
+
+        //create user if the above 3 checks pass
+        Auth.createNewUser(enteredEmail, enteredPassword, this);
+    }
+
+    private boolean isValidPassword(String password) {
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN =
+                "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.util;
 
 import android.content.Context;
 import android.util.Log;
@@ -21,8 +21,6 @@ public class Auth {
     private static final String R_TAG = "Register Activity";
     private static final String L_TAG = "Login Activity";
     private static final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private static FirebaseUser user;
-    private static boolean isUserLoggedIn = false;
 
     public static void createNewUser(String email, String password, Context context) {
         auth.createUserWithEmailAndPassword(email, password)
@@ -53,7 +51,7 @@ public class Auth {
     }
 
     private static void sendUserVerificationEmail() {
-        user = auth.getCurrentUser();
+        FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             user.sendEmailVerification();
         }

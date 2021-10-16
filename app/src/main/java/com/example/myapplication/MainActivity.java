@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.myapplication.login.StartActivity;
+import com.example.myapplication.util.Auth;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button logout;

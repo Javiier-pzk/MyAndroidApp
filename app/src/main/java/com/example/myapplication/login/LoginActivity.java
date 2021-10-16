@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,10 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.myapplication.util.Auth;
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
+import com.example.myapplication.util.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
@@ -59,10 +63,10 @@ public class LoginActivity extends AppCompatActivity implements FirebaseAuth.Aut
     private void validateAndLogin(String enteredEmail, String enteredPassword) {
         if (TextUtils.isEmpty(enteredEmail) || TextUtils.isEmpty(enteredPassword)) {
             Utils.showShortToast(this, "Email or password is empty!");
-        } else if (enteredPassword.length() < 6) {
-            Utils.showShortToast(this, "Password must be more than 6 characters long");
-        } else {
-            Auth.loginUser(enteredEmail, enteredPassword, this);
+            return;
         }
+
+        //Log user in if there are no empty fields
+        Auth.loginUser(enteredEmail, enteredPassword, this);
     }
 }

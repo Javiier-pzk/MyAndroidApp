@@ -7,37 +7,76 @@
     android:padding="30dp"
     tools:context=".login.RegisterActivity">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Set your email"
-        android:id="@+id/email"
-        android:layout_marginTop="100dp" />
+        android:id="@+id/textInputLayoutEmail"
+        android:layout_marginTop="50dp"
+        app:helperText="Required*"
+        app:endIconMode="clear_text"
+        app:helperTextTextColor="@android:color/holo_red_light"
+        app:startIconDrawable="@drawable/ic_email"
+        android:hint="@string/setEmail">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Set your password"
-        android:id="@+id/password"
-        android:layout_below="@id/email"
-        android:layout_marginTop="50dp" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextEmail"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter your password again"
-        android:id="@+id/reconfirmPassword"
-        android:layout_below="@id/password"
-        android:layout_marginTop="50dp" />
+        android:layout_below="@+id/textInputLayoutEmail"
+        android:layout_marginTop="20dp"
+        android:id="@+id/textInputLayoutPassword"
+        app:helperText="Required*"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        app:endIconMode="password_toggle"
+        app:helperTextTextColor="@android:color/holo_red_light"
+        app:startIconDrawable="@drawable/ic_lock"
+        android:hint="@string/setPassword">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextPassword"
+            android:inputType="textPassword"
+            android:maxLength="21"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/textInputLayoutPassword"
+        android:id="@+id/textInputLayoutReconfirmPassword"
+        app:helperText="Required*"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        app:endIconMode="password_toggle"
+        app:helperTextTextColor="@android:color/holo_red_light"
+        app:startIconDrawable="@drawable/ic_lock"
+        android:hint="@string/reenterPassword">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextReconfirmPassword"
+            android:inputType="textPassword"
+            android:maxLength="21"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/reconfirmPassword"
-        android:layout_marginTop="100dp"
+        android:layout_below="@id/textInputLayoutReconfirmPassword"
+        android:layout_marginTop="30dp"
         android:id="@+id/register"
-        android:text="register"/>
-
-
+        android:text="@string/register"/>
 
 </RelativeLayout>

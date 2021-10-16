@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,9 +32,9 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseAuth.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        reconfirmPassword = findViewById(R.id.reconfirmPassword);
+        email = findViewById(R.id.editTextEmail);
+        password = findViewById(R.id.editTextPassword);
+        reconfirmPassword = findViewById(R.id.editTextReconfirmPassword);
         register = findViewById(R.id.register);
 
         register.setOnClickListener(view -> {

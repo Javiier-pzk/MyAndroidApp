@@ -1,15 +1,19 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-public class StartActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
 
-    Button register;
-    Button login;
+public class StartActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
+
+    private Button register;
+    private Button login;
+    private boolean flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,5 +30,27 @@ public class StartActivity extends AppCompatActivity {
         login.setOnClickListener(view ->
                 startActivity(new Intent(this, LoginActivity.class))
         );
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseAuth.getInstance().addAuthStateListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FirebaseAuth.getInstance().removeAuthStateListener(this);
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        if (firebaseAuth.getCurrentUser() != null && flag) {
+            c
+            flag = false;
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
     }
 }

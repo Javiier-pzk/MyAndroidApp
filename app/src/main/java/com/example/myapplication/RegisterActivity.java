@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,13 +9,15 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class RegisterActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
+
+public class RegisterActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
     private EditText email;
     private EditText password;
     private EditText reconfirmPassword;
     private Button register;
-    private Auth auth;
+    private boolean flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,29 +28,49 @@ public class RegisterActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         reconfirmPassword = findViewById(R.id.reconfirmPassword);
         register = findViewById(R.id.register);
-        auth = new Auth();
 
         register.setOnClickListener(view -> {
                 String enteredEmail = email.getText().toString();
                 String enteredPassword = password.getText().toString();
                 String enteredReconfirmPassword = reconfirmPassword.getText().toString();
                 validateAndRegister(enteredEmail, enteredPassword, enteredReconfirmPassword);
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
             });
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseAuth.getInstance().addAuthStateListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FirebaseAuth.getInstance().addAuthStateListener(this);
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        if (firebaseAuth.getCurrentUser() != null && flag) {
+            //A temp solution to a firebase bug where the authStateListener is fired twice
+            flag = false;
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
     }
 
     private void validateAndRegister(String enteredEmail, String enteredPassword, String enteredReconfirmPassword) {
         if (TextUtils.isEmpty(enteredEmail) ||
             TextUtils.isEmpty(enteredPassword) ||
             TextUtils.isEmpty(enteredReconfirmPassword)) {
-            Utils.showToast(this, "Email or password is empty!");
+            Utils.showShortToast(this, "Email or password is empty!");
         } else if (enteredPassword.length() < 6) {
-            Utils.showToast(this, "Password must be more than 6 characters long");
+            Utils.showShortToast(this, "Password must be more than 6 characters long");
         } else if (!enteredReconfirmPassword.equals(enteredPassword)) {
-            Utils.showToast(this, "Your passwords do not match");
+            Utils.showShortToast(this, "Your passwords do not match");
         } else {
-            auth.createNewUser(enteredEmail, enteredPassword, this);
+            Auth.createNewUser(enteredEmail, enteredPassword, this);
         }
     }
 }

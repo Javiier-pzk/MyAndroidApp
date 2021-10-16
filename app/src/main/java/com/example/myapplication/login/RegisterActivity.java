@@ -5,15 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.text.TextUtils;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.example.myapplication.util.Auth;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.util.Utils;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
@@ -21,9 +18,9 @@ import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
-    private EditText email;
-    private EditText password;
-    private EditText reconfirmPassword;
+    private TextInputLayout email;
+    private TextInputLayout password;
+    private TextInputLayout reconfirmPassword;
     private Button register;
     private boolean flag = true;
 
@@ -32,15 +29,16 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseAuth.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        email = findViewById(R.id.editTextEmail);
-        password = findViewById(R.id.editTextPassword);
-        reconfirmPassword = findViewById(R.id.editTextReconfirmPassword);
+        email = findViewById(R.id.textInputLayoutEmail);
+        password = findViewById(R.id.textInputLayoutPassword);
+        reconfirmPassword = findViewById(R.id.textInputLayoutReconfirmPassword);
         register = findViewById(R.id.register);
 
         register.setOnClickListener(view -> {
-                String enteredEmail = email.getText().toString();
-                String enteredPassword = password.getText().toString();
-                String enteredReconfirmPassword = reconfirmPassword.getText().toString();
+                //can ignore potential null pointer exception as we have an edit field.
+                String enteredEmail = email.getEditText().getText().toString().trim();
+                String enteredPassword = password.getEditText().getText().toString().trim();
+                String enteredReconfirmPassword = reconfirmPassword.getEditText().getText().toString().trim();
                 validateAndRegister(enteredEmail, enteredPassword, enteredReconfirmPassword);
             });
     }
@@ -70,36 +68,56 @@ public class RegisterActivity extends AppCompatActivity implements FirebaseAuth.
 
     private void validateAndRegister(String enteredEmail, String enteredPassword,
                                      String enteredReconfirmPassword) {
-        if (TextUtils.isEmpty(enteredEmail) ||
-            TextUtils.isEmpty(enteredPassword) ||
-            TextUtils.isEmpty(enteredReconfirmPassword)) {
-            Utils.showShortToast(this, "Email or password is empty!");
-            return;
-        }
-
-        if (!isValidPassword(enteredPassword)) {
-            Utils.showLongToast(this,
-                    "Password must contain 8 - 20 characters and have at least "
-                            + "1 upper case letter, 1 digit and 1 special character");
-            return;
-        }
-
-        if (!enteredReconfirmPassword.equals(enteredPassword)) {
-            Utils.showShortToast(this, "Your passwords do not match");
-            return;
-        }
-
+       if (!isValidEmail(enteredEmail) | !isValidPassword(enteredPassword) |
+               !isValidReconfirmPassword(enteredPassword, enteredReconfirmPassword)) {
+           return;
+       }
         //create user if the above 3 checks pass
         Auth.createNewUser(enteredEmail, enteredPassword, this);
     }
 
-    private boolean isValidPassword(String password) {
+    private boolean isValidPassword(String enteredPassword) {
         Pattern pattern;
         Matcher matcher;
         final String PASSWORD_PATTERN =
                 "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$";
         pattern = Pattern.compile(PASSWORD_PATTERN);
-        matcher = pattern.matcher(password);
-        return matcher.matches();
+        matcher = pattern.matcher(enteredPassword);
+        if (enteredPassword.isEmpty()) {
+            password.setError("Password cannot be empty");
+            return false;
+        } else if (!matcher.matches()) {
+            password.setError("Password must be at least 8 - 20 characters long, "
+                    + "contain no spaces and have at least "
+                    + "1 upper case letter, 1 digit and 1 special character");
+            return false;
+        } else {
+            password.setError(null);
+            return true;
+        }
     }
+
+    private boolean isValidEmail(String enteredEmail) {
+        if (enteredEmail.isEmpty()) {
+            email.setError("Email cannot be empty");
+            return false;
+        } else {
+            email.setError(null);
+            return true;
+        }
+    }
+
+    private boolean isValidReconfirmPassword(String enteredPassword, String enteredReconfirmPassword) {
+        if (enteredReconfirmPassword.isEmpty()) {
+            reconfirmPassword.setError("Reconfirm password cannot be empty");
+            return false;
+        } else if (!enteredPassword.equals(enteredReconfirmPassword)) {
+            reconfirmPassword.setError("Your passwords do not match!");
+            return false;
+        } else {
+            reconfirmPassword.setError(null);
+            return true;
+        }
+    }
+
 }

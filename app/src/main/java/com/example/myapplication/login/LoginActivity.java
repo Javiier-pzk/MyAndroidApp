@@ -5,20 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.example.myapplication.util.Auth;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.util.Utils;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
-    private EditText email;
-    private EditText password;
+    private TextInputLayout email;
+    private TextInputLayout password;
     private Button login;
     private boolean flag = true;
 
@@ -27,13 +26,14 @@ public class LoginActivity extends AppCompatActivity implements FirebaseAuth.Aut
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        email = findViewById(R.id.editTextEmail);
-        password = findViewById(R.id.editTextPassword);
+        email = findViewById(R.id.textInputLayoutEmail);
+        password = findViewById(R.id.textInputLayoutPassword);
         login = findViewById(R.id.login);
 
         login.setOnClickListener(view -> {
-            String enteredEmail = email.getText().toString();
-            String enteredPassword = password.getText().toString();
+            //can ignore potential null pointer exception as we have an edit field.
+            String enteredEmail = email.getEditText().getText().toString().trim();
+            String enteredPassword = password.getEditText().getText().toString().trim();
             validateAndLogin(enteredEmail, enteredPassword);
         });
     }
@@ -61,12 +61,31 @@ public class LoginActivity extends AppCompatActivity implements FirebaseAuth.Aut
     }
 
     private void validateAndLogin(String enteredEmail, String enteredPassword) {
-        if (TextUtils.isEmpty(enteredEmail) || TextUtils.isEmpty(enteredPassword)) {
-            Utils.showShortToast(this, "Email or password is empty!");
+       if (!isValidEmail(enteredEmail) | !isValidPassword(enteredPassword)) {
             return;
         }
 
         //Log user in if there are no empty fields
         Auth.loginUser(enteredEmail, enteredPassword, this);
+    }
+
+    private boolean isValidEmail(String enteredEmail) {
+        if (enteredEmail.isEmpty()) {
+            email.setError("Email cannot be empty");
+            return false;
+        } else {
+            email.setError(null);
+            return true;
+        }
+    }
+
+    private boolean isValidPassword(String enteredPassword) {
+        if (enteredPassword.isEmpty()) {
+            password.setError("Password cannot be empty");
+            return false;
+        } else {
+            password.setError(null);
+            return true;
+        }
     }
 }

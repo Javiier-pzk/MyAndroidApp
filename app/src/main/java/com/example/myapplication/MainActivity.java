@@ -12,6 +12,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -24,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int IMAGE_CAPTURE_CODE = 1001;
     private static final int PERMISSION_CODE = 1000;
     private Button cameraButton;
-    private Button logout;
     private ImageView imageView;
     private Uri imageUri;
 
@@ -32,16 +34,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        logout = findViewById(R.id.logout);
         cameraButton = findViewById(R.id.cameraButton);
         imageView = findViewById(R.id.imageView);
-
         cameraButton.setOnClickListener(view -> getPermission());
-        logout.setOnClickListener(view -> {
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.logout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.logoutMenu) {
             Auth.signOut(this);
             startActivity(new Intent(this, StartActivity.class));
             finish();
-        });
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //this method is called when user presses deny or allow from request permission popup

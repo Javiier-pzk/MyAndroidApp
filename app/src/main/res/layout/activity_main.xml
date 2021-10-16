@@ -7,11 +7,28 @@
     android:padding="30dp"
     tools:context=".MainActivity">
 
+    <ImageView
+    android:layout_width="350dp"
+    android:layout_height="500dp"
+    android:id="@+id/imageView"
+    android:scaleType="centerCrop"
+    android:src="@drawable/image_view" />
+
+    <Button
+        android:id="@+id/cameraButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Capture Image"
+        android:layout_marginTop="30dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/imageView"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/logout"
         android:text="logout"
+        android:layout_below="@+id/cameraButton"
         android:layout_centerInParent="true" />
 
 </RelativeLayout>

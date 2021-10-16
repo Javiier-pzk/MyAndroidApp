@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="welcome"> Welcome! </string>
+    <string name="register"> Register </string>
+    <string name="login"> Login </string>
+    <string name="email"> Email </string>
+    <string name="password"> Password </string>
+    <string name="reenterPassword"> Enter your password again </string>
+    <string name="setEmail"> Set your email </string>
+    <string name="setPassword"> Set your password </string>
+    <string name="logout"> logout </string>
+    <string name="captureImage"> Capture Image </string>
 </resources>

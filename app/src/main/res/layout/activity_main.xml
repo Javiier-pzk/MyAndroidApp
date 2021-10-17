@@ -8,19 +8,29 @@
     tools:context=".MainActivity">
 
     <ImageView
-    android:layout_width="350dp"
+    android:layout_width="400dp"
     android:layout_height="500dp"
     android:id="@+id/imageView"
     android:scaleType="centerCrop"
-    android:src="@drawable/image_view" />
+    android:src="@drawable/image_preview" />
 
-    <Button
-        android:id="@+id/cameraButton"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/captureImage"
-        android:layout_marginTop="30dp"
+        android:layout_below="@id/imageView"
+        android:id="@+id/photoText"
+        android:text="Photo"
         android:layout_centerInParent="true"
-        android:layout_below="@+id/imageView"/>
+        android:layout_marginTop="20dp"
+        android:textSize="20dp"
+        />
+    <ImageView
+        android:id="@+id/cameraButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="@string/captureImage"
+        android:src="@drawable/ic_camera"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/photoText"/>
 
 </RelativeLayout>

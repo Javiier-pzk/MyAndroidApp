@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int IMAGE_CAPTURE_CODE = 1001;
     private static final int PERMISSION_CODE = 1000;
-    private Button cameraButton;
+    private ImageView cameraButton;
     private ImageView imageView;
     private Uri imageUri;
 

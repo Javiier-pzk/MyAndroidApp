@@ -10,7 +10,6 @@ import android.widget.Button;
 import com.example.myapplication.util.Auth;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
